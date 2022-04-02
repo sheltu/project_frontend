@@ -1,22 +1,43 @@
+import { ColorSchemeProvider, MantineProvider } from "@mantine/core";
+import { useLocalStorage } from "@mantine/hooks";
 import { NotificationsProvider } from "@mantine/notifications";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Pages from "./pages/index";
 
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Home from "./pages/Home";
+const theme = {};
 
 function App() {
+  const [colorScheme, setColorScheme] = useLocalStorage({
+    key: "mantine-color-scheme",
+    defaultValue: "light",
+  });
+
+  const toggleColorScheme = (value) =>
+    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
   return (
-    <NotificationsProvider autoClose={5000}>
-      <BrowserRouter>
-        <Routes>
-          <Route index element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
-      </BrowserRouter>
-    </NotificationsProvider>
+    <ColorSchemeProvider
+      colorScheme={colorScheme}
+      toggleColorScheme={toggleColorScheme}
+    >
+      <MantineProvider
+        theme={{
+          colorScheme,
+          defaultRadius: "md",
+          fontFamily: "Poppins, sans-serif",
+          fontFamilyMonospace: "Source Code Pro, monospace",
+          headings: {
+            fontFamily: "Poppins, sans-serif",
+            fontWeight: "700",
+          },
+          loader: "oval",
+        }}
+        withGlobalStyles
+      >
+        <NotificationsProvider autoClose={3000}>
+          <Pages />
+        </NotificationsProvider>
+      </MantineProvider>
+    </ColorSchemeProvider>
   );
 }
 export default App;
