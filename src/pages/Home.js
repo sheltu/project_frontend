@@ -1,7 +1,9 @@
 import { Button } from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Check } from "tabler-icons-react";
 import { logout, reset } from "../features/auth/auth.slice";
 
 const Home = () => {
@@ -13,6 +15,11 @@ const Home = () => {
   useEffect(() => {
     if (!user) {
       navigate("/login");
+      showNotification({
+        color: "green",
+        title: "Logged Out",
+        icon: <Check />,
+      });
     }
 
     return () => {
