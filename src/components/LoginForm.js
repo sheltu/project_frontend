@@ -17,7 +17,7 @@ import { Check, Lock, Mail, X } from "tabler-icons-react";
 import { Link, useNavigate } from "react-router-dom";
 import { showNotification, updateNotification } from "@mantine/notifications";
 
-import { login } from "../features/auth/auth.slice";
+import { login, reset } from "../features/auth/auth.slice";
 
 const LoginForm = () => {
   const form = useForm({
@@ -80,7 +80,7 @@ const LoginForm = () => {
   };
 
   return (
-    <Box sx={{ width: 500 }} mx="xl" mt="xl">
+    <Box sx={{ width: 500 }} mx="xl">
       <Paper shadow="xl" p="md" withBorder>
         <Title order={2}>LOGIN</Title>
         <Space h="md" />
@@ -112,7 +112,7 @@ const LoginForm = () => {
                 Login
               </Button>
               <Center>
-                <Anchor component={Link} to="/register" size="xs">
+                <Anchor component={Link} to="/register" size="sm">
                   Don't have an account? Register
                 </Anchor>
               </Center>

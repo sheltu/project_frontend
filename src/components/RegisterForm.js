@@ -1,13 +1,15 @@
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
 import {
   TextInput,
   Checkbox,
   Button,
-  Group,
   Box,
   PasswordInput,
   Space,
   Anchor,
-  Text,
   Center,
   Paper,
   Title,
@@ -16,9 +18,7 @@ import {
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
 import { Check, Lock, Mail, X } from "tabler-icons-react";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+
 import { register, reset } from "../features/auth/auth.slice";
 
 const RegisterForm = () => {
@@ -37,8 +37,8 @@ const RegisterForm = () => {
           value
         )
           ? null
-          : "Invalid pass",
-      confirm_password: (value) =>
+          : "Invalid passwword",
+      confirmPassword: (value) =>
         value === form.values.password ? null : "Password doesn't match",
     },
   });
@@ -96,7 +96,7 @@ const RegisterForm = () => {
   };
 
   return (
-    <Box sx={{ width: 500 }} mx="xl" mt="xl">
+    <Box sx={{ maxWidth: 500 }} mx="xl">
       <Paper shadow="xl" p="md" withBorder>
         <Title order={2}>SIGN UP</Title>
         <Space h="md" />
@@ -111,7 +111,7 @@ const RegisterForm = () => {
           />
           <Space h="sm" />
           <PasswordInput
-            placeholder="Enter the password"
+            placeholder="Enter password"
             label="Password"
             description="Password must include at least one uppercase letter, lowercase letter, number and special character with minimum 6 characters"
             icon={<Lock size={16} />}
@@ -145,7 +145,7 @@ const RegisterForm = () => {
                 Register
               </Button>
               <Center>
-                <Anchor position="left" component={Link} to="/login" size="xs">
+                <Anchor position="left" component={Link} to="/login" size="sm">
                   Have an account? Login
                 </Anchor>
               </Center>
