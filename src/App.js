@@ -23,10 +23,10 @@ function App() {
         theme={{
           colorScheme,
           defaultRadius: "md",
-          fontFamily: "Poppins, sans-serif",
+          fontFamily: "Barlow Semi Condensed, sans-serif",
           fontFamilyMonospace: "Source Code Pro, monospace",
           headings: {
-            fontFamily: "Poppins, sans-serif",
+            fontFamily: "Barlow Semi Condensed, sans-serif",
             fontWeight: "700",
           },
           loader: "oval",
