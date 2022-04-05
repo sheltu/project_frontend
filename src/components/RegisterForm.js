@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import {
   TextInput,
-  Checkbox,
   Button,
   Box,
   PasswordInput,
@@ -25,11 +24,9 @@ const RegisterForm = () => {
   const form = useForm({
     initialValues: {
       email: "",
-      termsOfService: false,
       password: "",
       confirmPassword: "",
     },
-
     validate: {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
       password: (value) =>
@@ -37,13 +34,11 @@ const RegisterForm = () => {
           value
         )
           ? null
-          : "Invalid passwword",
+          : "Invalid password",
       confirmPassword: (value) =>
         value === form.values.password ? null : "Password doesn't match",
     },
   });
-
-  const { email, password, confirmPassword } = form.values;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -83,24 +78,12 @@ const RegisterForm = () => {
     dispatch(reset());
   }, [user, isLoading, isError, isSuccess, message, navigate, dispatch]);
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-
-    const userData = {
-      email,
-      password,
-      confirmPassword,
-    };
-
-    dispatch(register(userData));
-  };
-
   return (
     <Box sx={{ maxWidth: 500 }} mx="xl">
       <Paper shadow="xl" p="md" withBorder>
         <Title order={2}>SIGN UP</Title>
         <Space h="md" />
-        <form onSubmit={onSubmit}>
+        <form onSubmit={form.onSubmit((values) => dispatch(register(values)))}>
           <TextInput
             required
             label="Email"
@@ -128,20 +111,9 @@ const RegisterForm = () => {
             {...form.getInputProps("confirmPassword")}
             required
           />
-          <Checkbox
-            mt="md"
-            size="xs"
-            label="I Accept the Terms & Conditions"
-            {...form.getInputProps("termsOfService", { type: "checkbox" })}
-          />
           <div>
             <Stack mt="xl" align="stretch" justify="center" spacing="lg">
-              <Button
-                position="right"
-                type="submit"
-                size="md"
-                disabled={form.values.termsOfService ? false : true}
-              >
+              <Button position="right" type="submit" size="md">
                 Register
               </Button>
               <Center>

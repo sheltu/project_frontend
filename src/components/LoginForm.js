@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import * as yup from "yup";
+
 import {
   TextInput,
   Button,
@@ -25,13 +27,17 @@ const LoginForm = () => {
       email: "",
       password: "",
     },
-
     validate: {
+      // email: yup.string().required().email(),
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
     },
+    // schema: {
+    //   email: yup.string().required().email(),
+    //   password: yup.string().required(),
+    // },
   });
 
-  const { email, password } = form.values;
+  // const { email, password } = form.values;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -68,23 +74,23 @@ const LoginForm = () => {
     }
   }, [user, isLoading, isError, isSuccess, message, navigate, dispatch]);
 
-  const onSubmit = (e) => {
-    e.preventDefault();
+  // const onSubmit = (e) => {
+  //   e.preventDefault();
 
-    const userData = {
-      email,
-      password,
-    };
+  //   const userData = {
+  //     email,
+  //     password,
+  //   };
 
-    dispatch(login(userData));
-  };
+  //   dispatch(login(userData));
+  // };
 
   return (
     <Box sx={{ width: 500 }} mx="xl">
       <Paper shadow="xl" p="md" withBorder>
         <Title order={2}>LOGIN</Title>
         <Space h="md" />
-        <form onSubmit={onSubmit}>
+        <form onSubmit={form.onSubmit((values) => dispatch(login(values)))}>
           <TextInput
             required
             label="Email"
