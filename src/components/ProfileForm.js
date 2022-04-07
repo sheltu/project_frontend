@@ -11,6 +11,7 @@ import {
   Select,
   NumberInput,
   MultiSelect,
+  Group,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { Album, AddressBook, Medal } from "tabler-icons-react";
@@ -20,13 +21,16 @@ const ProfileForm = () => {
   const data = Array(50)
     .fill(0)
     .map((_, index) => `Item ${index}`);
+
   const [value, setValue] = useState([]);
+
   const form = useForm({
     initialValues: {
       regNo: "",
       fullName: "",
       dept: "",
-      batch: 1985,
+      startYear: 1985,
+      endYear: 1989,
       interests: value,
     },
     validate: {
@@ -42,7 +46,7 @@ const ProfileForm = () => {
   //   };
 
   return (
-    <Box sx={{ maxWidth: 500 }} mx="xl">
+    <Box sx={{ minWidth: 200, maxWidth: 500 }} mx="xl">
       <Paper shadow="xl" p="md" withBorder>
         <Title order={2}>PROFILE SETUP</Title>
         <Space h="md" />
@@ -64,12 +68,13 @@ const ProfileForm = () => {
             {...form.getInputProps("fullName")}
             required
           />
+
           <Space h="sm" />
           <Select
             size="md"
             required
             label="Department"
-            placeholder="Pick one"
+            placeholder="Select your department"
             data={[
               { value: "Civil Engineering", label: "Civil Engineering" },
               {
@@ -92,17 +97,30 @@ const ProfileForm = () => {
             {...form.getInputProps("dept")}
           />
           <Space h="sm" />
-          <NumberInput
-            size="md"
-            required
-            icon={<Medal size={16} />}
-            label="Batch"
-            max={year}
-            min={1985}
-            stepHoldDelay={500}
-            stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
-            {...form.getInputProps("batch")}
-          />
+          <Group noWrap>
+            <NumberInput
+              size="md"
+              required
+              icon={<Medal size={16} />}
+              label="Start year"
+              max={year}
+              min={1985}
+              stepHoldDelay={500}
+              stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
+              {...form.getInputProps("startYear")}
+            />
+            <NumberInput
+              size="md"
+              required
+              icon={<Medal size={16} />}
+              label="End year"
+              max={year + Number(4)}
+              min={1989}
+              stepHoldDelay={500}
+              stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
+              {...form.getInputProps("endYear")}
+            />
+          </Group>
           <Space h="sm" />
           <MultiSelect
             value={value}
@@ -111,9 +129,10 @@ const ProfileForm = () => {
             size="md"
             label="Areas of Interest"
             placeholder="Search here..."
+            creatable
+            getCreateLabel={(query) => `+ Create ${query}`}
             searchable
-            limit={20}
-            nothingFound="Nothing found"
+            limit={10}
             {...form.getInputProps("interests")}
           />
           <div>
