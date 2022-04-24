@@ -64,7 +64,8 @@ const StepperComponent = () => {
           Completed, click back button to get to previous step
         </Stepper.Completed>
       </Stepper>
-
+      //There is going to be a button in here that says "I'm a student" and it will let them students to skip this component 
+      //Later they can add internship experiences in the profile page.
       <Group position="center" mt="xl">
         <Button
           variant="default"
