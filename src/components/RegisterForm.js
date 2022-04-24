@@ -13,12 +13,47 @@ import {
   Paper,
   Title,
   Stack,
+  Progress,
+  Text,
+  Popover,
 } from "@mantine/core";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
 import { Check, Lock, Mail, X } from "tabler-icons-react";
 
 import { register, reset } from "../features/auth/auth.slice";
+
+function PasswordRequirement({ meets, label }) {
+  return (
+    <Text
+      color={meets ? "teal" : "red"}
+      sx={{ display: "flex", alignItems: "center" }}
+      mt={7}
+      size="sm"
+    >
+      {meets ? <Check /> : <X />} <Box ml={10}>{label}</Box>
+    </Text>
+  );
+}
+
+const requirements = [
+  { re: /[0-9]/, label: "Includes number" },
+  { re: /[a-z]/, label: "Includes lowercase letter" },
+  { re: /[A-Z]/, label: "Includes uppercase letter" },
+  { re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: "Includes special symbol" },
+];
+
+function getStrength(password) {
+  let multiplier = password.length > 5 ? 0 : 1;
+
+  requirements.forEach((requirement) => {
+    if (!requirement.re.test(password)) {
+      multiplier += 1;
+    }
+  });
+
+  return Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 10);
+}
 
 const RegisterForm = () => {
   const form = useForm({
@@ -46,6 +81,8 @@ const RegisterForm = () => {
   const { user, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.auth
   );
+  
+  const [popoverOpened, setPopoverOpened] = useState(false);
 
   useEffect(() => {
     if (isLoading) {
@@ -78,6 +115,16 @@ const RegisterForm = () => {
     dispatch(reset());
   }, [user, isLoading, isError, isSuccess, message, navigate, dispatch]);
 
+  const checks = requirements.map((requirement, index) => (
+    <PasswordRequirement
+      key={index}
+      label={requirement.label}
+      meets={requirement.re.test(form.values.password)}
+    />
+  ));
+  const strength = getStrength(form.values.password);
+  const color = strength === 100 ? "teal" : strength > 50 ? "yellow" : "red";
+  
   return (
     <Box sx={{ maxWidth: 500 }} mx="xl">
       <Paper shadow="xl" p="md" withBorder>
@@ -93,15 +140,40 @@ const RegisterForm = () => {
             {...form.getInputProps("email")}
           />
           <Space h="sm" />
-          <PasswordInput
-            placeholder="Enter password"
-            label="Password"
-            description="Password must include at least one uppercase letter, lowercase letter, number and special character with minimum 6 characters"
-            icon={<Lock size={16} />}
-            size="md"
-            {...form.getInputProps("password")}
-            required
-          />
+          <Popover
+            opened={popoverOpened}
+            position="bottom"
+            placement="start"
+            withArrow
+            styles={{ popover: { width: "100%" } }}
+            trapFocus={false}
+            transition="pop-top-left"
+            onFocusCapture={() => setPopoverOpened(true)}
+            onBlurCapture={() => setPopoverOpened(false)}
+            target={
+              <PasswordInput
+                placeholder="Enter password"
+                label="Password"
+                description="Password must include at least one uppercase letter, lowercase letter, number and special character with minimum 6 characters"
+                icon={<Lock size={16} />}
+                size="md"
+                {...form.getInputProps("password")}
+                required
+              />
+            }
+          >
+            <Progress
+              color={color}
+              value={strength}
+              size={5}
+              style={{ marginBottom: 10 }}
+            />
+            <PasswordRequirement
+              label="Includes at least 6 characters"
+              meets={form.values.password.length > 5}
+            />
+            {checks}
+          </Popover>
           <Space h="sm" />
           <PasswordInput
             placeholder="Re-enter password"
