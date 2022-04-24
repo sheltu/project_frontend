@@ -4,6 +4,7 @@ import { useViewportSize } from "@mantine/hooks";
 
 import VerifyMail from "./VerifyMail";
 import ProfileForm from "./ProfileForm";
+import ExperienceForm from "./ExperienceForm";
 import {
   MailOpened,
   Medal,
@@ -45,17 +46,12 @@ const StepperComponent = () => {
         </Stepper.Step>
         <Stepper.Step
           allowStepSelect={active > 2}
-          icon={<School />}
-          label={width < 992 ? null : "Add education"}
-        >
-          <h1>Add Education</h1>
-        </Stepper.Step>
-        <Stepper.Step
-          allowStepSelect={active > 2}
           icon={<Medal />}
           label={width < 992 ? null : "Add experience"}
         >
-          <h1>Add Experience</h1>
+          <Center sx={{ height: "100%" }}>
+            <ExperienceForm />
+          </Center>
         </Stepper.Step>
         <Stepper.Step
           allowStepSelect={active > 2}
